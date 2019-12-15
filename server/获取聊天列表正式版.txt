@@ -1,0 +1,120 @@
+ --------------------------正式使用版本--------------------
+                 
+--查询最后与对方的最新一条私信信息                                 
+select 'SL' type,
+       messageid,
+       otherpartid,
+       ui.username name,
+       ui.AVATAR avatar,
+       mi.content,
+       mi.time,
+       mi.ts
+  from (select messageid, touserid otherpartid, content, time, ts
+          from history hi
+         where ts || hi.fromuserid || '__' || touserid in
+               (select max(ts) || ft
+                  from (select messageid,
+                               fromuserid || '__' || touserid ft,
+                               fromuserid,
+                               touserid,
+                               content,
+                               groupid,
+                               time,
+                               ts
+                          from history hi
+                         where (hi.fromuserid =
+                               (select userid
+                                   from userinfo ui
+                                  where ui.USERCODE = 'admin'))
+                           and length(groupid) = 0   
+                           and length(touserid)!=0              
+                           and hi.fromuserid!=touserid
+                        union all
+                        select messageid,
+                               touserid || '__' || fromuserid ft,
+                               fromuserid,
+                               touserid,
+                               content,
+                               groupid,
+                               time,
+                               ts
+                          from history hi
+                         where (hi.touserid =
+                               (select userid
+                                   from userinfo ui
+                                  where ui.USERCODE = 'admin'))
+                           and length(groupid) = 0   
+                           and length(fromuserid)!=0              
+                           and hi.fromuserid!=touserid) hi
+                
+                 group by ft)
+        union all
+        select messageid, fromuserid otherpartid, content, time, ts
+          from history hi
+         where ts || hi.touserid || '__' || fromuserid in
+               (select max(ts) || ft
+                  from (select messageid,
+                               fromuserid || '__' || touserid ft,
+                               fromuserid,
+                               touserid,
+                               content,
+                               groupid,
+                               time,
+                               ts
+                          from history hi
+                         where (hi.fromuserid =
+                               (select userid
+                                   from userinfo ui
+                                  where ui.USERCODE = 'admin'))
+                           and length(groupid) = 0       
+                           and length(touserid)!=0          
+                           and hi.fromuserid!=touserid
+                        union all
+                        select messageid,
+                               touserid || '__' || fromuserid ft,
+                               fromuserid,
+                               touserid,
+                               content,
+                               groupid,
+                               time,
+                               ts
+                          from history hi
+                         where (hi.touserid =
+                               (select userid
+                                   from userinfo ui
+                                  where ui.USERCODE = 'admin'))
+                           and length(groupid) = 0     
+                           and length(fromuserid)!=0            
+                           and hi.fromuserid!=touserid) hi
+                
+                 group by ft)) mi
+  left join userinfo ui
+    on mi.otherpartid = ui.USERID
+-----以上是私聊    
+
+union all
+-----群聊     
+
+select 'QL' type,
+       mi.messageid,
+       mi.groupid otherpartid,
+       gi.GROUPNAME name,
+       gi.AVATAR avatar,
+       mi.content,
+       mi.time,
+       mi.ts
+  from (select *
+          from history hi
+         where ts || hi.GROUPID in
+               (select max(ts) || groupid
+                  from history hi
+                 where hi.GROUPID in
+                       (select GROUPID
+                          from groupuser gu
+                         where gu.USERID =
+                               (select userid
+                                  from userinfo ui
+                                 where ui.USERCODE = 'admin'))
+                 group by groupid)) mi
+  left join groupinfo gi
+    on gi.GROUPID = mi.groupid;

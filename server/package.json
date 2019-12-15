@@ -1,0 +1,20 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "```markdown\r router:只做请求分发，没有业务逻辑 \r middlewares:业务中间件，如用户权限控制 \r model只能由它的proxy访问，而proxy能被controller和service访问。 \r controller主要逻辑处理 \r service作为项目的业务组件。如：redis连接服务，缓存组件，日志组件等，他可以减少controller的负担。 \r app:放一次性脚本\r ```",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "md5": "^2.2.1",
+    "socket.io": "^2.3.0",
+    "sqlite3": "^4.1.0"
+  }
+}

@@ -1,0 +1,64 @@
+.chat-form-main {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.chat-form-main .title {
+  font-size: 32px;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.form-item-control {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.form-item-control>input {
+  display: block;
+  width: 100%;
+  padding: 6px 20px;
+  box-sizing: border-box;
+  border-radius: 2px;
+  border: 1px solid #ddd;
+  outline: none;
+}
+
+.link {
+  color: #096dd9;
+  cursor: pointer;
+}
+
+.btn {
+  cursor: pointer;
+  border-radius: 2px;
+  outline: none;
+  padding: 5px 12px;
+  text-shadow: none;
+  border: 1px solid #47c479;
+  line-height: 1.2;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #47c479;
+  border-color: #47c479;
+}
+
+.btn-block {
+  width: 100%;
+  display: block;
+}
+
+.link {
+  color: #096dd9;
+  cursor: pointer;
+}
+
+.error {
+  color: red;
+}
+
