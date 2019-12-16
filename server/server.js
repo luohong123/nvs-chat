@@ -27,8 +27,6 @@ require('./db.js');
 var myroute = require('./routes');
 
 var port = 3000;
-var hostname = 'localhost';
-// var hostname = '127.0.0.1';
 var io = require('socket.io')(http);
 // socket
 var socketChat = require('./core/socket.js').socketChat;
@@ -78,6 +76,6 @@ app.get('/history/list', myroute.historyList);
 
 
 // 端口
-http.listen(port, hostname, function () {
-  console.log(`Server running at http://${hostname}:${port}/`);
+http.listen(port, function () {
+  console.log(`Server running at http://localhost:${port}/`);
 });

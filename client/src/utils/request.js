@@ -7,12 +7,11 @@
  * @email: 3300536651@qq.com
  */
 import axios from 'axios';
-const url = process.env.VUE_APP_BASE_API;
 // eslint-disable-next-line no-console
-console.log(url, 'url');
 // create an axios instance
+console.log(process.env.VUE_APP_BASE_API,' process.env.VUE_APP_BASE_API')
 const service = axios.create({
-  baseURL: 'http://localhost:3000', // url = base url + request url
+  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
 });

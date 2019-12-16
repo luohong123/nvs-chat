@@ -1,6 +1,5 @@
 'use strict';
 const path = require('path');
-
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
@@ -8,6 +7,8 @@ function resolve(dir) {
 const port = 8080;
 // const port = process.env.port || 8080;
 const isDev = process.env.NODE_ENV === 'development';
+
+
 console.log(isDev, '====isDev');
 const VUE_APP_BASE_API = '/dev-api';
 const name = 'nodeChatRoom';
@@ -19,7 +20,7 @@ module.exports = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
-  publicPath: !isDev ? '/nodeChatRoom/' : '/',
+  publicPath: isDev ? '/' : '/',
   outputDir: 'docs',
   assetsDir: 'static',
   lintOnSave: isDev,
@@ -35,8 +36,8 @@ module.exports = {
       // 如果你的前端应用和后端 API 服务器没有运行在同一个主机上，你需要在开发环境下将 API 请求代理到 API 服务器
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
-      [VUE_APP_BASE_API]: {
-        target: isDev ? 'http://localhost:3000' : '',
+      [process.env.VUE_APP_BASE_API]: {
+        target: isDev ? 'http://localhost:3000' : 'http://39.96.19.170:3000',
         changeOrigin: true,
         pathRewrite: {
           ['^' + VUE_APP_BASE_API]: ''

@@ -356,7 +356,6 @@ exports.getMessageList = function(userId) {
     
     `;
     return new Promise((resolve, reject) => {
-      db.serialize(()=>{
         db.all(sql, (err, rows) => {
           if (err) return reject(err);
           // let unreadSql = `
@@ -369,7 +368,6 @@ exports.getMessageList = function(userId) {
           // 查询离线记录表,返回未读消息条数
           return resolve(rows);
         });
-      })
     });
   } else {
     // 游客身份可以浏览一个默认的群  智能机器人

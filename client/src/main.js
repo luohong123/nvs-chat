@@ -23,7 +23,7 @@ import '@/assets/fonts/ali_icon/iconfont.css';
 // };
 const isDev = process.env.NODE_ENV === 'development';
 import io from 'socket.io-client';
-const ip = isDev ? 'http://localhost:3000' : '';
+const ip = process.env.VUE_APP_BASE_API;
 Vue.prototype.$socket = io(ip);
 Vue.config.productionTip = false;
 import axios from 'axios';

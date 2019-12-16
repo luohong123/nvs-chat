@@ -87,3 +87,80 @@ https://blog.csdn.net/qq_38081746/article/details/90673681
 Linux CentOS + Nodejs + Express 部署 vue 项目 https://blog.csdn.net/lihefei_coder/article/details/90700965
 
 用 mac 电脑上传本地文件到阿里云服务器 https://jingyan.baidu.com/article/ae97a64672d076fbfc461d29.html
+
+
+ whereis nginx
+ 三、 nginx配置
+查看nginx安装位置
+  whereis nginx
+
+  进入nginx配置文件目录
+  cd /etc/nginx/  找到nginx.conf文件
+打开配置文件
+ vim nginx.conf
+代理配置
+server {
+    // 访问端口号
+    listen       80;
+    // 服务器地址(访问ip)
+    server_name  116.62.238.176;
+  
+    include /etc/nginx/default.d/*.conf;
+    // 静态资源文件
+    location / { 
+      // 静态资源存放路径
+      root /home/html/; 
+      // 默认读取文件
+      index index.html index.htm;     
+    }
+    // 接口代理
+    location /api {
+      // 后端代码接口地址
+      proxy_pass: http://120.78.xx.xx:8071;
+    }
+
+    error_page 404 /404.html;
+        location = /40x.html {
+    } 
+
+    重启nginx
+ nginx -s reload
+
+ 阿里云CentOS 7环境静态资源部署 https://www.jianshu.com/p/7b2bce81b4ed
+
+ 启动nginx服务报错 https://www.cnblogs.com/yihr/p/9588964.html
+ 解决nginx 403forbidden问题: https://blog.csdn.net/yishuifengxiao/article/details/80574769
+
+
+ ```markdown
+router:只做请求分发，没有业务逻辑 
+middlewares:业务中间件，如用户权限控制 
+model只能由它的proxy访问，而proxy能被controller和service访问。 
+controller主要逻辑处理 
+service作为项目的业务组件。如：redis连接服务，缓存组件，日志组件等，他可以减少controller的负担。 
+app:放一次性脚本
+```
+# sqlite3
+当用户上线时,离线消息表的一组数据追加到历史记录表中,并删除离线消息表的相关记录
+使用一个表来填充另一个表
+您可以通过在一个有一组字段的表上使用 select 语句，填充数据到另一个表中。下面是语法：
+```
+INSERT INTO first_table_name [(column1, column2, ... columnN)] 
+   SELECT column1, column2, ...columnN 
+   FROM second_table_name
+   [WHERE condition];
+```
+```
+SELECT * FROM GROUPINFO WHERE GROUPID =  (SELECT GROUPID FROM GROUPUSER WHERE USERID = '79075de0-17ca-11ea-8b61-ebb7391af6af');
+
+```
+
+消息列表
+```
+sudo npm uninstall pm2
+
+sudo npm i pm2@latest -g
+
+sudo ln -s  /root/node-v9.3.0-linux-x64/lib/node_modules/pm2/bin/pm2 /usr/local/bin/pm2
+```
+
