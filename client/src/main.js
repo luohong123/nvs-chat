@@ -20,7 +20,7 @@ import { devEnvironment } from '../environments/enviroment.dev';
 import { prodEnvironment } from '../environments/enviroment.prod';
 const isDev = process.env.NODE_ENV === 'development';
 const ip = isDev ? devEnvironment.apiurl : prodEnvironment.apiurl;
-Vue.prototype.$socket = io(ip);
+Vue.prototype.$socket = io(ip, { 'reconnect': true });
 Vue.config.productionTip = false;
 import axios from 'axios';
 Vue.prototype.$http = axios;

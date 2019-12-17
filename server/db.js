@@ -416,7 +416,6 @@ exports.getOfflineList = function (userId) {
 // 获取历史消息
 exports.getHistoryList = function (data) {
   let sql,
-    messages = [], // 消息集合
     userSql = 'SELECT * FROM USERINFO WHERE', // 用户信息
     privateSql,
     historys = [];
@@ -451,8 +450,8 @@ exports.getHistoryList = function (data) {
                 CONTENT: messages[i].CONTENT,
                 TIME: messages[i].TIME,
                 TS: messages[i].TS,
-                AVATAR: userInfo[0].AVATAR,
-                USERNAME: userInfo[0].USERNAME
+                AVATAR: userInfo.length>0?userInfo[0].AVATAR:'',
+                USERNAME: userInfo.length>0?userInfo[0].USERNAME:''
               });
             }
             return resolve(historys);

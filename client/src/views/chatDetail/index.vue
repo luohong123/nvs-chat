@@ -10,7 +10,7 @@
     <listitem :list="list" class="left-list" />
   </div>
   <div class="right">
-    <headerbar v-bind:title="friendInfo.name" v-on:toggle="toggle" ref="headerbar"  :more="friendInfo.type==='QL'"/>
+    <headerbar v-bind:title="friendInfo.name" v-on:toggle="toggle" ref="headerbar" :more="friendInfo.type==='QL'" />
     <chat class="chat-wrap" :list="historyChats" />
     <!-- 隐藏区域 -->
     <div class="more-introduce" v-bind:class="{ show: isOpen }">
@@ -97,14 +97,21 @@ export default {
     //  this.$socket.on 的原因引起多次触发
     // 解决方法: https://github.com/this.$socketio/this.$socket.io/issues/474#issuecomment-2833227
     // https://groups.google.com/forum/?hl=en&fromgroups#!topic/this.$socket_io/X9FRMjCkPco
-    this.$socket.on("connection", () => {
+    this.$socket.on("reconnecting", () => {
       console.log("已经连接");
       // 获取用户信息
       getUserInfoByName().then(result => {
         if (result) {
+          this.userInfo = result;
           this.$socket.emit("add user", result.USERNAME);
         }
       });
+    });
+    getUserInfoByName().then(result => {
+      if (result) {
+        this.userInfo = result;
+        this.$socket.emit("add user", result.USERNAME);
+      }
     });
     // 接收广播的消息 群聊
     this.$socket.on("new message", data => {
@@ -267,7 +274,6 @@ export default {
     getMessageList: function () {
       getUserInfoByName().then(result => {
         let userId = result ? result["USERID"] : null;
-        this.list = [];
         // 获取用户信息
         getUserInfoByName().then(result => {
           if (result) {
@@ -278,10 +284,11 @@ export default {
           .then(response => {
             if (response.code === "0") {
               let _list = response["data"];
+              let messages = [];
               offlineList(userId).then(offlines => {
                 for (let i = 0; i < _list.length; i++) {
-                  this.list.push({
-                    type: _list.type,
+                  messages.push({
+                    type: _list[i].type,
                     messageid: _list[i].messageid,
                     name: _list[i].name,
                     avatar: _list[i].avatar,
@@ -300,11 +307,11 @@ export default {
                 //   }
                 // }
                 // 查询每个消息列表的未读消息(保存在offline表中的离线消息)分别为多少条
+                this.list = messages;;
                 if (this.count === 0) {
                   this.changeHistroy(this.list[0]);
                   this.count++;
                 }
-                return this.list;
               });
             }
           })

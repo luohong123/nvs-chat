@@ -3,7 +3,7 @@
   <span class="left" v-if="left">{{left}}</span>
   <span class="title" v-if="title">{{title}}</span>
   <span>
-    <i class="icon iconfont icon-gengduo more toggle" v-if="more" v-on:click="toggle"></i>
+    <i class="icon iconfont icon-gengduo more toggle" v-show="more" v-on:click="toggle"></i>
   </span>
 </div>
 </template>
