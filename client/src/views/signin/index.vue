@@ -41,6 +41,9 @@
 <script>
 import md5 from 'md5';
 import { login } from '@/api/userinfo';
+import {
+  setToken
+} from '@/utils/auth';
 export default {
   name: 'signin',
   data() {
@@ -59,9 +62,10 @@ export default {
           if (response.code === '0' && response.data) {
             console.log(response, 'res:登录');
             // 登录成功后可以评论了
+            this.$socket.emit('add user',  response.data.userName);
             window.localStorage.setItem('userName', response.data.userName);
             window.localStorage.setItem('token', response.token);
-            this.$socket.emit('add user',  response.data.userName);
+            setToken(response.data.token);
             this.$router.push('/');
           }
           console.log(response, 'response');

@@ -1,29 +1,25 @@
 <template>
-  <ul class="list-item">
-    <li
-      class="list-item-every"
-      v-for="(item, index) in list"
-      v-bind:key="item.messageid"
-      v-bind:class="{ active: currentIndex === index }"
-      v-on:click="changeMessage(item, index)"
-    >
-      <img class="avatar" :src="item.avatar" alt="avator" />
-      <div class="list-item-right">
-        <div class="list-item-header">
-          <span class="title">{{ item.name }}</span>
-          <span class="time">{{ item.time }}</span>
-        </div>
-        <div class="list-item-content">
-          <span class="text">{{ item.content }}</span>
-          <i class="icon iconfont"></i>
-        </div>
+<ul class="list-item">
+  <li class="list-item-every" v-for="(item, index) in list" v-bind:key="item.messageid" v-bind:class="{ active: currentIndex === index }" v-on:click="changeMessage(item, index)">
+    <img class="avatar" :src="item.avatar" alt="avator" />
+    <div class="list-item-right">
+      <div class="list-item-header">
+        <span class="title">{{ item.name }}</span>
+        <span class="time">{{ item.time }}</span>
       </div>
-    </li>
-  </ul>
+      <div class="list-item-content">
+        <span class="text">{{ item.content }}</span>
+        <i class="icon iconfont"></i>
+      </div>
+    </div>
+  </li>
+</ul>
 </template>
 
 <script>
-import { eventHub } from '@/utils/event-bus';
+import {
+  eventHub
+} from '@/utils/event-bus';
 export default {
   name: 'ListItem',
   props: ['list'],
@@ -33,7 +29,7 @@ export default {
     };
   },
   methods: {
-    changeMessage: function(item, index) {
+    changeMessage: function (item, index) {
       this.currentIndex = index;
       eventHub.$emit('change', item);
     }

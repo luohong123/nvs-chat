@@ -59,6 +59,8 @@ app.post('/register', myroute.register);
 app.get('signout', myroute.signout);
 // 消息列表
 app.get('/messageList', myroute.messageList);
+// 离线消息
+app.get('/offlineList', myroute.offlineList);
 // 消息列表-发起新的聊天
 app.post('/message/create', myroute.messageCreate);
 // 群列表

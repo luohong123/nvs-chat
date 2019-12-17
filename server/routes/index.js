@@ -15,6 +15,7 @@ const _getGroupInfoById = require('../db').getGroupInfoById;
 const _getGroupUsersById = require('../db').getGroupUsersById;
 const _historyCreate = require('../db').historyCreate;
 const _groupInfoList = require('../db').groupInfoList;
+const _getOfflineList = require('../db').getOfflineList;
 function JWT_auth(req, res, next) {
   let authorization = req.headers['X-Token'];
   // 如果存在token
@@ -39,11 +40,8 @@ function JWT_auth(req, res, next) {
   else res.status(401).send('未授权');
 }
 // 注册
-exports.register = function (req, res) {
-  let imgUrl =
-    'public/images/' +
-    Math.round(Math.random() * 10) +
-    '.jpeg';
+exports.register = function(req, res) {
+  let imgUrl = 'public/images/' + Math.round(Math.random() * 10) + '.jpeg';
   let person = {
     USERID: common.getGuid(),
     USERCODE: req.body.userName,
@@ -73,14 +71,14 @@ exports.register = function (req, res) {
         .catch(err => {
           res.status(200).send({
             code: '0',
-            message: err,
+            message: err
           });
-        })
+        });
     }
   });
 };
 // 登录
-exports.login = function (req, res) {
+exports.login = function(req, res) {
   let person = {
     USERNAME: req.body.userName,
     PASSWORD: req.body.passWord
@@ -110,15 +108,15 @@ exports.login = function (req, res) {
   });
 };
 // 登出
-exports.signout = function (req, res) {
-  req.session.destroy(() => console.log('销毁session，已经推出登录'));
+exports.signout = function(req, res) {
+  req.session.destroy(() => console.log('销毁session，已经退出登录'));
   res.send({
     code: '0',
     message: '已登出'
   });
 };
 // 消息列表
-exports.messageList = function (req, res) {
+exports.messageList = function(req, res) {
   // 根据userId 查询和自己相关的群聊和私聊,加入到消息列表中,并根据群聊或者私聊的最后一条聊天记录时间倒序排序
   let userId = req.query.userId;
   if (userId && userId !== undefined && userId !== null && userId !== '') {
@@ -130,7 +128,6 @@ exports.messageList = function (req, res) {
         data: result
       });
     });
-
   } else {
     // 游客身份
     _getMessageList(userId).then(result => {
@@ -142,8 +139,23 @@ exports.messageList = function (req, res) {
     });
   }
 };
+/**
+ * 离线消息
+ */
+exports.offlineList = function(req, res) {
+  let userId = req.query.userId;
+  _getOfflineList(userId).then(result => {
+    if (result) {
+      return res.status(200).send({
+        code: '0',
+        message: `您有${result.length}条离线消息待查看。`,
+        data: result
+      });
+    }
+  });
+};
 // 消息列表-发起新的聊天
-exports.messageCreate = function (req, res) {
+exports.messageCreate = function(req, res) {
   let data = req.body;
   let message = {
     MESSAGEID: common.getGuid(),
@@ -153,19 +165,18 @@ exports.messageCreate = function (req, res) {
     CONTENT: data.CONTENT,
     TIME: data.TIME,
     TS: common.getTimeS()
-  }
-  console.log(message, '发起新的聊天');
+  };
   _historyCreate(message).then(result => {
     res.status(200).send({
       code: '0',
       message: '成功发起新的聊天',
       data: []
-    })
-  })
+    });
+  });
 };
 
 // 消息详情
-exports.historyList = function (req, res) {
+exports.historyList = function(req, res) {
   let query = {
     type: req.query.type, // QL表示群聊
     otherpartid: req.query.otherpartid // 对方的id
@@ -188,21 +199,29 @@ exports.historyList = function (req, res) {
 };
 
 // 用户信息
-exports.getUserInfo = function (req, res) {
+exports.getUserInfo = function(req, res) {
   let person = {
     USERNAME: req.query.USERNAME,
     USERID: req.query.USERID
-  }
+  };
   _getUserInfo(person).then(result => {
-    return res.status(200).send({
-      code: '0',
-      message: '请求成功',
-      data: result
-    });
+    if (result) {
+      return res.status(200).send({
+        code: '0',
+        message: '请求成功',
+        data: result
+      });
+    } else {
+      return res.status(200).send({
+        code: '-1',
+        message: '请求失败',
+        data: []
+      });
+    }
   });
 };
 //群信息-列表集合
-exports.groupinfoList = function (req, res) {
+exports.groupinfoList = function(req, res) {
   _groupInfoList().then(result => {
     res.status(200).send({
       code: '0',
@@ -210,56 +229,55 @@ exports.groupinfoList = function (req, res) {
       data: {
         groups: result
       }
-    })
-  })
-}
+    });
+  });
+};
 // 群聊-详情
-exports.groupInfoDetail = function (req, res) {
-  _getGroupInfoById(req.query.groupId).then(result => {
-    res.status(200).send({
-      code: '0',
-      message: '请求成功',
-      data: result
+exports.groupInfoDetail = function(req, res) {
+  _getGroupInfoById(req.query.groupId)
+    .then(result => {
+      res.status(200).send({
+        code: '0',
+        message: '请求成功',
+        data: result
+      });
     })
-  })
     .catch(err => {
       res.status(200).send({
         code: '-1',
         message: '请求失败',
         data: err
-      })
-    })
+      });
+    });
 };
 // 群用户
-exports.groupUserList = function (req, res) {
-  _getGroupUsersById(req.query.groupId).then(result => {
-    res.status(200).send({
-      code: '0',
-      message: '请求成功',
-      data: result
+exports.groupUserList = function(req, res) {
+  _getGroupUsersById(req.query.groupId)
+    .then(result => {
+      res.status(200).send({
+        code: '0',
+        message: '请求成功',
+        data: result
+      });
     })
-  })
     .catch(err => {
       res.status(200).send({
         code: '-1',
         message: '请求失败',
         data: err
-      })
-    })
-}
+      });
+    });
+};
 // 创建新群
-exports.groupInfoCreate = function (req, res) {
+exports.groupInfoCreate = function(req, res) {
   let groupInfo = req.body.groupInfo;
   groupInfo.GROUPID = common.getGuid();
   groupInfo.TS = common.getTimeS();
   groupInfo.AVATAR =
-    'public/images/' +
-    Math.round(Math.random() * 10) +
-    '.jpeg';
+    'public/images/' + Math.round(Math.random() * 10) + '.jpeg';
   _groupInfoAdd(groupInfo).then(result => {
     if (result.code === '0') {
       res.status(200).send(result);
     }
   });
 };
-

@@ -7,9 +7,6 @@ function resolve(dir) {
 const port = 8080;
 // const port = process.env.port || 8080;
 const isDev = process.env.NODE_ENV === 'development';
-
-
-console.log(isDev, '====isDev');
 const VUE_APP_BASE_API = '/dev-api';
 const name = 'nodeChatRoom';
 module.exports = {
@@ -37,7 +34,7 @@ module.exports = {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
-        target: isDev ? 'http://localhost:3000' : 'http://39.96.19.170:3000',
+        target: isDev ? 'http://localhost:3000' : 'http://云服务公网ip:3000',
         changeOrigin: true,
         pathRewrite: {
           ['^' + VUE_APP_BASE_API]: ''

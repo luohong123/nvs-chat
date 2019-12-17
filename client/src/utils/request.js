@@ -9,9 +9,12 @@
 import axios from 'axios';
 // eslint-disable-next-line no-console
 // create an axios instance
-console.log(process.env.VUE_APP_BASE_API,' process.env.VUE_APP_BASE_API')
+import { devEnvironment } from '../../environments/enviroment.dev';
+import { prodEnvironment } from '../../environments/enviroment.prod';
+const isDev = process.env.NODE_ENV === 'development';
+const url = isDev ? devEnvironment.apiurl : prodEnvironment.apiurl;
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  baseURL: url, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
 });
@@ -32,7 +35,8 @@ service.interceptors.request.use(
   },
   error => {
     // do something with request error
-    // console.log(error) // for debug
+    // eslint-disable-next-line no-console
+    console.error(error) // for debug
     return Promise.reject(error);
   }
 );
@@ -61,7 +65,7 @@ service.interceptors.response.use(
     }
   },
   error => {
-    alert('err' + error); // for debug
+   console.error(error,5);
     return Promise.reject(error);
   }
 );

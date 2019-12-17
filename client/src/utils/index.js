@@ -96,10 +96,10 @@ export function showDeskTopNotice(title, icon, msg) {
           //如果通知消息被点击,通知窗口将被激活
           window.focus();
         }),
-        (notify.onerror = () => {
-          // eslint-disable-next-line no-console
-          console.log('HTML5桌面消息出错！！！');
-        });
+          (notify.onerror = () => {
+            // eslint-disable-next-line no-console
+            console.log('HTML5桌面消息出错！！！');
+          });
         notify.onshow = () => {
           // eslint-disable-next-line no-console
           console.log('msg', '桌面消息');
@@ -120,29 +120,26 @@ export function showDeskTopNotice(title, icon, msg) {
 }
 
 export function getToken() {
-  console.log(window.localStorage.getItem('token'), 'token');
   return window.localStorage.getItem('token');
 }
 /**
  * 根据userName查询用户信息
  */
 export function getUserInfoByName() {
-  if (getToken()) {
-    let userName = window.localStorage.getItem('userName');
-    return new Promise((resolve, reject) => {
-      searchUserInfo({
-        USERNAME: userName,
-        USERID: ''
-      }).then(response => {
-        if (response.code === '0') {
-          let userInfo = response['data'];
-          return resolve(userInfo);
-        } else {
-          return reject(response);
-        }
-      });
+  let userName = window.localStorage.getItem('userName');
+  return new Promise((resolve, reject) => {
+    searchUserInfo({
+      USERNAME: userName,
+      USERID: ''
+    }).then(response => {
+      if (response&&response.code === '0') {
+        let userInfo = response['data'];
+        return resolve(userInfo);
+      } else {
+        return reject(response);
+      }
     });
-  }
+  });
 }
 /**
  * 根据id查询用户信息

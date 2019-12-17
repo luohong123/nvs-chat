@@ -2,19 +2,25 @@
 <div class="headerbar">
   <span class="left" v-if="left">{{left}}</span>
   <span class="title" v-if="title">{{title}}</span>
-  <i class="icon iconfont icon-gengduo more toggle" v-on:click="toggle"></i>
+  <span>
+    <i class="icon iconfont icon-gengduo more toggle" v-if="more" v-on:click="toggle"></i>
+  </span>
 </div>
 </template>
 
 <script>
-import {eventHub} from '@/utils/event-bus';
-import {getUserName} from '@/utils';
+import {
+  eventHub
+} from '@/utils/event-bus';
+import {
+  getUserName
+} from '@/utils';
 export default {
   name: 'HeaderBar',
   props: ['title', 'more', 'left'],
-  data(){
+  data() {
     return {
-      userName:getUserName()
+      userName: getUserName()
     }
   },
   methods: {

@@ -22,7 +22,7 @@ var _offlineCreate = require('../db').offlineCreate;
 var userInfo = {};
 var socketUsers = {};
 var testUsers = {};
-exports.socketChat = function(io) {
+exports.socketChat = function (io) {
   io.on('connection', socket => {
     // 用户是否进入
     let addedUser = false;
@@ -36,7 +36,7 @@ exports.socketChat = function(io) {
       addedUser = true;
       // 修改用户在线状态
       userInfo = {
-        USERNAME: socket.username,
+        USERNAME: username,
         ONLINESTATE: 'Y'
       };
       _onlineStateUpdate(userInfo);
@@ -123,31 +123,6 @@ exports.socketChat = function(io) {
               }
             });
           }
-          // _historyCreate(message).then(result => {
-          //     // 服务端接收到私聊
-          //     if (message.TOUSERID) {
-          //         // 首先判断是否在线,如果离线,直接把消息发送到离线记录表,待用户上线后,把
-          //         // 离线记录表的消息copy到历史记录表中,并删除离线记录表的相关数据
-          //         _getUserInfo({
-          //             USERNAME: '',
-          //             USERID: message.TOUSERID
-          //         }).then(userInfo => {
-          //             if(userInfo.ONLINESTATE==='Y') {
-
-          //             }
-          //             console.log(userInfo, '====>userInfo');
-          //             let toUser = socketUsers[userInfo.USERNAME];
-          //             console.log(testUsers, '==>testUsers');
-          //             if (toUser) {
-          //                 // 把私聊发送给接收人
-          //                 toUser.emit('private', {
-          //                     username: userInfo.USERNAME,
-          //                     message: message
-          //                 });
-          //             }
-          //         });
-          //     }
-          // });
         }
       });
     });

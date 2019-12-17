@@ -23,6 +23,19 @@ export function messageList(userId) {
   });
 }
 /**
+ * 离线消息
+ * @param {*} userId 
+ */
+export function offlineList(userId) {
+  return request({
+    url: '/offlineList',
+    method: 'get',
+    params: {
+      userId: userId,
+    }
+  });
+}
+/**
  * 发起新的聊天
  * @param {*} data 
  */

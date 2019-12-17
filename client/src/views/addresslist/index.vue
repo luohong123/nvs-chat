@@ -50,6 +50,7 @@ export default {
 .addresslist {
   display: flex;
   flex-wrap: wrap;
+  overflow: auto;
 }
 .group-item {
   width: 30%;
