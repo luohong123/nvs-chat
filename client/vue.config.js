@@ -9,6 +9,41 @@ const port = 8080;
 const isDev = process.env.NODE_ENV === 'development';
 const VUE_APP_BASE_API = '/dev-api';
 const name = 'nodeChatRoom';
+// 输出顺序 1 7 6 8 9 11 10 12 2 4 3 5
+console.log('1');
+      setTimeout(function() {
+        console.log('2');
+        process.nextTick(function() {
+          console.log('3');
+        });
+        new Promise(function(resolve) {
+          console.log('4');
+          resolve();
+        }).then(function() {
+          console.log('5');
+        });
+      }, 3000);
+      process.nextTick(function() {
+        console.log('6');
+      });
+      new Promise(function(resolve) {
+        console.log('7');
+        resolve();
+      }).then(function() {
+        console.log('8');
+      });
+      setTimeout(function() {
+        console.log('9');
+        process.nextTick(function() {
+          console.log('10');
+        });
+        new Promise(function(resolve) {
+          console.log('11');
+          resolve();
+        }).then(function() {
+          console.log('12');
+        });
+      }, 1000);
 module.exports = {
   /**
    * You will need to set publicPath if you plan to deploy your site under a sub path,

@@ -1,5 +1,5 @@
 <template>
-<div class="layout">
+<div class="layout" v-bind:style="{background: 'center no-repeat url('+bg + '/public/images/bg.jpg'}">
   <!-- <div class="tips" v-if="!isLogin || !userName">
     <p class="tourist">
       您现在是
@@ -25,6 +25,10 @@ import {
   getToken,
   getUserInfoByName
 } from '@/utils/index';
+import { devEnvironment } from '../../environments/enviroment.dev';
+import { prodEnvironment } from '../../environments/enviroment.prod';
+const isDev = process.env.NODE_ENV === 'development';
+const ip = isDev ? devEnvironment.apiurl : prodEnvironment.apiurl;
 export default {
   name: 'Layout',
   components: {
@@ -32,6 +36,7 @@ export default {
   },
   data: function () {
     return {
+      bg: ip,
       isLogin: getToken(),
       userName: getUserInfoByName().userName,
       transitionName: 'slideleft',
@@ -92,7 +97,6 @@ export default {
   align-items: center;
   justify-content: center;
   position: relative;
-  background: url('http://bimgs.plmeizi.com/images/bing/2019/OHR.HidingEggs_ZH-CN2732414254_1920x1080.jpg');
   background-position: center;
   background-repeat: no-repeat;
 }
